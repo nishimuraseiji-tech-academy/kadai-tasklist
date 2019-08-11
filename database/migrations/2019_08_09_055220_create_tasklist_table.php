@@ -11,7 +11,6 @@ class CreateTasklistTable extends Migration
      *
      * @return void
      */
-    // 変更 //
     public function up()
     {
         Schema::create('tasks', function (Blueprint $table) {

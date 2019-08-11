@@ -27,14 +27,14 @@ class TasksController extends Controller
                 'user' => $user,
                 'tasks' => $tasks,
             ];
+            
+            // 追記：$dataの配列にタスクの個数をカウントして渡す        
+            $data += $this->counts($user);
         }
-
-        // 追記：$dataの配列にタスクの個数をカウントして渡す        
-        $data += $this->counts($user);
 
         //index.blade.phpに取得したuser情報とタスクを渡す
         //indexページをViewとして表示
-        return view('tasks.index', $data);
+        return view('welcome', $data);
     }
 
     /**
