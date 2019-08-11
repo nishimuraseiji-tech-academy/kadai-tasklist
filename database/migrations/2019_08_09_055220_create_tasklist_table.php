@@ -15,7 +15,10 @@ class CreateTasklistTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('status',10);  // status  カラム追加
             $table->string('content');    // content カラム追加
+            $table->integer('user_id')->unsigned()->index();            // user_id カラムの追加
+            $table->foreign('user_id')->references('id')->on('users');  // 外部キー制約
             $table->timestamps();
         });
     }
