@@ -17,10 +17,13 @@
                     {!! Form::label('content', 'タスク:') !!}
                     {!! Form::text('content', null, ['class' => 'form-control']) !!}
                 </div>
-        
-                {!! Form::submit('作成', ['class' => 'btn btn-primary']) !!}
-        
-            {!! Form::close() !!}
+
+                <!--↓追記（ログインしたユーザでないと作成ボタンが表示されない）-->
+                @if (Auth::check())
+                    {!! Form::open(['route' => 'tasks.store']) !!}    
+                        {!! Form::submit('作成', ['class' => 'btn btn-primary']) !!}
+                    {!! Form::close() !!}
+                @endif
         </div>
     </div>
 @endsection

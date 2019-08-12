@@ -28,8 +28,6 @@ class TasksController extends Controller
                 'tasks' => $tasks,
             ];
             
-            // 追記：$dataの配列にタスクの個数をカウントして渡す        
-            $data += $this->counts($user);
         }
 
         //index.blade.phpに取得したuser情報とタスクを渡す
@@ -83,12 +81,31 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        /* 変更なし */
-        $task = Task::find($id);
-
-        return view('tasks.show', [
-            'task' => $task,
-        ]);
+        
+        $data = [];
+        
+        // 画面クリックした$idのリンクから、ユーザ特定
+        //（show.blade.phpで正しいユーザでないと編集ボタンを表示したくないため）
+        $user  = User::find($id);
+        
+        // 画面クリックした$idのタスクを1件取得
+        $task = \App\Task::find($id);
+        
+        // 選択したidとタスクのuser_idが一致していたら
+        // タスクをshow.blade.php（View）に渡す
+        if (\Auth::id() === $task->user_id) {
+            $data = [
+                'user' => $user,
+                'task' => $task,
+            ];
+        
+            return view('tasks.show', $data);
+        
+        }else{
+            // 選択したidとタスクのuser_idが一致していなければ
+            // トップページ(indexページ)に飛ぶ
+            return redirect('/');
+        }
     }
 
     /**
@@ -99,12 +116,30 @@ class TasksController extends Controller
      */
     public function edit($id)
     {
-        /* 変更なし */
-        $task = Task::find($id);
-
-        return view('tasks.edit', [
-            'task' => $task,
-        ]);
+        $data = [];
+        
+        // 画面クリックした$idのリンクから、ユーザ特定
+        //（edit.blade.phpで正しいユーザでないとボタンを表示したくないため）
+        $user  = User::find($id);
+        
+        // 画面クリックした$idのタスクを1件取得
+        $task = \App\Task::find($id);
+        
+        // 選択したidとタスクのuser_idが一致していたら、
+        // タスクをshow.blade.php（View）に渡す
+        if (\Auth::id() === $task->user_id) {
+            $data = [
+                'user' => $user,
+                'task' => $task,
+            ];
+        
+            return view('tasks.edit', $data);
+        
+        }else{
+            // 選択したidとタスクのuser_idが一致していなければ
+            // トップページ(indexページ)に飛ぶ
+            return redirect('/');
+        }
     }
 
     /**
